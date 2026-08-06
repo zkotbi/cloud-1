@@ -1,0 +1,38 @@
+---
+- name: Allow SSH
+  become: true
+  ufw:
+    rule: allow
+    port: "22"
+    proto: tcp
+
+- name: Allow HTTP
+  become: true
+  ufw:
+    rule: allow
+    port: "80"
+    proto: tcp
+
+- name: Allow HTTPS
+  become: true
+  ufw:
+    rule: allow
+    port: "443"
+    proto: tcp
+
+- name: Deny all incoming connections by default
+  become: true
+  ufw:
+    direction: incoming
+    policy: deny
+
+- name: Allow all outgoing connections
+  become: true
+  ufw:
+    direction: outgoing
+    policy: allow
+
+- name: Enable UFW
+  become: true
+  ufw:
+    state: enabled

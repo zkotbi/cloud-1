@@ -1,0 +1,11 @@
+---
+- name: Deploy Cloud-1
+  hosts: cloud
+  become: true
+
+  roles:
+    - common
+    - docker
+    - firewall
+    - deploy
+    - compose

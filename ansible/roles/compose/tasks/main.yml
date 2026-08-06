@@ -1,0 +1,10 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for compose
+- name: Build and start containers
+  become: true
+
+  community.docker.docker_compose_v2:
+    project_src: /opt/inception/srcs
+    build: always
+    state: present

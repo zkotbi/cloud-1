@@ -1,0 +1,46 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for deploy
+- name: create pg directory
+  become: true
+
+  file:
+    path: /opt/inception
+    state: directory
+    mode: "0755"
+
+- name: create presistenet data dir
+  become: true
+
+  file:
+    path: /opt/inception/data
+    state: directory
+    mode: "0755"
+
+
+- name: create wordpress volume directory
+  become: true
+  file:
+    path: /opt/inception/data/wordpress
+    state: directory
+    mode: "0755"
+
+- name: create mariadb volume directory
+  become: true
+  file:
+    path: /opt/inception/data/mariadb
+    state: directory
+    mode: "0755"
+
+- name: Copy inception project
+  become: true
+  copy:
+    src: "{{ playbook_dir }}/../inception/srcs/"
+    dest: /opt/inception/srcs/
+
+- name: Copy .env
+  become: true
+  copy:
+    src: "{{ playbook_dir }}/../inception/srcs/.env"
+    dest: /opt/inception/srcs/.env
+    mode: "0600"

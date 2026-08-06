@@ -1,0 +1,36 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for common
+- name: update apt cache
+  become: true
+
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: upgrade packages
+  become: true
+
+  apt:
+    upgrade: dist
+    state: latest
+
+- name: install common pakages
+  become: true
+  
+  apt:
+    name:
+      - git
+      - curl
+      - ufw
+      - ca-certificates
+      - gnupg
+      - lsb-release
+
+    state: present
+
+- name: Enable ufw
+  become: true
+
+  ufw:
+    state: enabled
