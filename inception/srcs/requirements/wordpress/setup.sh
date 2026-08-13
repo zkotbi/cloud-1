@@ -10,9 +10,6 @@ wp config set DB_NAME $DB_NAME
 wp config set DB_USER $DB_USER
 wp config set DB_PASSWORD $DB_PASS
 wp config set DB_HOST 'mariadb'
-wp config set WP_REDIS_HOST 'redis'
-wp config set WP_REDIS_PORT '6379'
-wp config set WP_REDIS_PASSWORD $REDIS_PASS
 
 sed -i 's/listen = 127.0.0.1:9000/listen = 9000/1' /etc/php83/php-fpm.d/www.conf
 
