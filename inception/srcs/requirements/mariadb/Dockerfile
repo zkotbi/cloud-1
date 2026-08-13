@@ -1,15 +1,12 @@
-FROM debian:bullseye
+FROM alpine:3.21
 
-RUN apt update -y && apt upgrade -y
+RUN apk update && apk add mariadb mariadb-client
 
-RUN apt-get install mariadb-server -y
+RUN mkdir -p /run/mysqld && \
+        chown -R mysql:mysql /run/mysqld && \ 
+        chmod -R 744 /run/mysqld 
 
-RUN apt-get install mariadb-client -y
+COPY ./setup.sh /setup.sh
 
-RUN sed -i 's/127.0.0.1/0.0.0.0/1' /etc/mysql/mariadb.conf.d/50-server.cnf
+CMD ["sh", "/setup.sh"]
 
-COPY ./tools/run.sh /
-
-RUN chmod +x /run.sh
-
-CMD ["./run.sh"]

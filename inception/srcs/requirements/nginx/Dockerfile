@@ -1,13 +1,13 @@
-FROM debian:bullseye
+FROM alpine:3.21
 
-RUN apt update -y && apt upgrade -y
+RUN apk update && apk add nginx openssl
 
-RUN apt install -y nginx
+RUN mkdir -p /run/php && \
+        mkdir -p /var/www/html;
 
-RUN apt install -y openssl
+COPY setup.sh /setup.sh
 
-COPY ./tools/script.sh /
+COPY nginx.conf /etc/nginx/nginx.conf
 
-RUN chmod +x /script.sh
+CMD ["sh", "/setup.sh"]
 
-CMD ["./script.sh"]

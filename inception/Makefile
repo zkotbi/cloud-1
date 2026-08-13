@@ -1,19 +1,23 @@
 
-all : up
+CONFIG_FILE = srcs/docker-compose.yml
 
-up : 
-	@mkdir -p /home/zkotbi/data/mariadb
-	@mkdir -p /home/zkotbi/data/wordpress
-	@docker-compose -f ./srcs/docker-compose.yml up -d
+all: up
 
-down : 
-	@docker-compose -f ./srcs/docker-compose.yml down
+up: volumes
+	docker-compose -f  ${CONFIG_FILE} up -d
 
-stop : 
-	@docker-compose -f ./srcs/docker-compose.yml stop
+down:
+	docker-compose -f  ${CONFIG_FILE} down
 
-start : 
-	@docker-compose -f ./srcs/docker-compose.yml start
+rebuild: down
+	docker-compose -f  ${CONFIG_FILE} up -d --build
 
-status : 
-	@docker ps
+
+volumes:
+	mkdir -p ${HOME}/data/mariadb
+	mkdir -p ${HOME}/data/wordpress
+	mkdir -p ${HOME}/data/adminer
+
+purge: 
+	docker stop $(shell docker ps -a -q)
+	docker system prune -a --volumes

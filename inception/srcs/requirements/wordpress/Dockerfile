@@ -1,13 +1,28 @@
-FROM debian:bullseye
+FROM alpine:3.21
 
-RUN apt update -y && apt upgrade -y
+RUN apk update && apk add   php83 \
+                            php83-common \
+                            php83-phar \
+                            php83-fpm  \
+                            php83-openssl \
+                            php83-sockets \
+                            php83-curl \
+                            php83-fileinfo \
+                            php83-mbstring \
+                            php83-mysqli \
+                            php83-redis \
+                            php83-tokenizer \
+                            php83-ctype \
+                            php83-zip \
+                            wget
 
-RUN apt install php-fpm php-mysql -y
+WORKDIR /var/www/html/wordpress
 
-RUN apt install curl -y
+COPY ./setup.sh /setup.sh
 
-COPY ./tools/script.sh /
+COPY ./build.sh /build.sh
 
-RUN chmod +x /script.sh
+RUN sh /build.sh
 
-CMD ["./script.sh"]
+CMD ["sh", "/setup.sh"]
+
