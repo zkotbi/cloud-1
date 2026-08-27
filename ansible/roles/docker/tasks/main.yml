@@ -21,7 +21,7 @@
   become: true
   
   apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_facts['distribution_release'] }} stable"
     state: present
     filename: docker
 
@@ -43,10 +43,12 @@
     state: started
     enabled: true
 
-- name: add ubuntu user to docker group
+- name: add user to docker group
   become: true
-
   user:
-    name: ubuntu
+    name: "{{ ansible_user }}"
     groups: docker
     append: yes
+
+- name: Reset SSH connection for docker group membership to take effect
+  meta: reset_connection

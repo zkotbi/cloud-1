@@ -2,9 +2,9 @@
 ---
 # tasks file for compose
 - name: Build and start containers
-  become: true
-
   community.docker.docker_compose_v2:
-    project_src: /opt/inception/srcs
+    project_src: "{{ inception_dest }}/srcs"
     build: always
     state: present
+  environment:
+    HOME: "{{ app_home }}"

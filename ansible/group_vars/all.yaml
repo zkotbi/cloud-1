@@ -1,0 +1,5 @@
+---
+app_user: "{{ ansible_user }}"
+app_home: "/home/{{ ansible_user }}"
+inception_dest: "{{ app_home }}/inception"
+data_dest: "{{ app_home }}/data"

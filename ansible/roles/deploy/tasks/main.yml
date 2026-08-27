@@ -1,46 +1,32 @@
 #SPDX-License-Identifier: MIT-0
 ---
-# tasks file for deploy
-- name: create pg directory
-  become: true
-
+- name: Create inception and data directories
   file:
-    path: /opt/inception
+    path: "{{ item }}"
     state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
     mode: "0755"
+  loop:
+    - "{{ inception_dest }}"
+    - "{{ data_dest }}/mariadb"
+    - "{{ data_dest }}/wordpress"
 
-- name: create presistenet data dir
-  become: true
-
-  file:
-    path: /opt/inception/data
-    state: directory
-    mode: "0755"
-
-
-- name: create wordpress volume directory
-  become: true
-  file:
-    path: /opt/inception/data/wordpress
-    state: directory
-    mode: "0755"
-
-- name: create mariadb volume directory
-  become: true
-  file:
-    path: /opt/inception/data/mariadb
-    state: directory
-    mode: "0755"
-
-- name: Copy inception project
-  become: true
+- name: Copy Inception project (Makefile and srcs)
   copy:
-    src: "{{ playbook_dir }}/../inception/srcs/"
-    dest: /opt/inception/srcs/
+    src: "{{ playbook_dir }}/../inception/"
+    dest: "{{ inception_dest }}/"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: "preserve"
 
-- name: Copy .env
-  become: true
+- name: Copy environment configuration
   copy:
-    src: "{{ playbook_dir }}/../inception/srcs/.env"
-    dest: /opt/inception/srcs/.env
+    src: "{{ item }}"
+    dest: "{{ inception_dest }}/srcs/.env"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
     mode: "0600"
+  with_first_found:
+    - "{{ playbook_dir }}/../inception/srcs/.env"
+    - "{{ playbook_dir }}/../inception/srcs/env-example"

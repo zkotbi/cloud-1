@@ -13,9 +13,8 @@
 
   apt:
     upgrade: dist
-    state: latest
 
-- name: install common pakages
+- name: Install common packages
   become: true
   
   apt:
@@ -29,8 +28,3 @@
 
     state: present
 
-- name: Enable ufw
-  become: true
-
-  ufw:
-    state: enabled
