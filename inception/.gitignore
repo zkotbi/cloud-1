@@ -1,2 +1,4 @@
-
 .env
+*.key
+*.crt
+!srcs/requirements/nginx/ssl/README.md

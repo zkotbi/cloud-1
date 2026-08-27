@@ -14,6 +14,7 @@ RUN apk update && apk add   php83 \
                             php83-tokenizer \
                             php83-ctype \
                             php83-zip \
+                            mariadb-client \
                             wget
 
 WORKDIR /var/www/html/wordpress

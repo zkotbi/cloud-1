@@ -7,19 +7,14 @@ services:
     networks:
       - inception
     ports:
+      - "80:80"
       - "443:443"
     restart: always
     volumes:
       - wordpress:/var/www/html/wordpress
-      - adminer:/var/www/html/adminer
+      - ./requirements/nginx/ssl:/etc/ssl/custom-certs:ro
     depends_on:
       wordpress:
-        condition: service_healthy
-      cadvisor:
-        condition: service_healthy
-      adminer:
-        condition: service_healthy
-      website:
         condition: service_healthy
 
   mariadb:
@@ -33,10 +28,11 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "mariadb-admin ping -uroot -p$DB_ROOT_PASS"]
+      test: ["CMD-SHELL", "mariadb-admin ping -uroot -p$$DB_ROOT_PASS"]
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 15s
 
   wordpress:
     container_name: wordpress
@@ -49,8 +45,6 @@ services:
     volumes:
       - wordpress:/var/www/html/wordpress
     depends_on:
-      redis:
-        condition: service_healthy
       mariadb:
         condition: service_healthy
     healthcheck:
@@ -59,8 +53,6 @@ services:
       timeout: 5s
       retries: 5
       start_period: 3s
-
-
 
 networks:
   inception:
@@ -80,4 +72,3 @@ volumes:
       type: none
       o: bind
       device: ${HOME}/data/wordpress  
-
