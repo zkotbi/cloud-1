@@ -1,0 +1,10 @@
+---
+- name: Deploy MariaDB
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception_dest }}/srcs"
+    services:
+      - mariadb
+    state: present
+    build: always
+  environment:
+    HOME: "{{ app_home }}"

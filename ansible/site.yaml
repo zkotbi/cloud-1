@@ -9,3 +9,12 @@
     - firewall
     - deploy
     - compose
+
+    - role: mariadb
+      tags: mariadb
+
+    - role: wordpress
+      tags: wordpress
+
+    - role: nginx
+      tags: nginx

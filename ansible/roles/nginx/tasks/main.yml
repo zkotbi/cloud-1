@@ -1,0 +1,10 @@
+---
+- name: Deploy Nginx
+  community.docker.docker_compose_v2:
+    project_src: "{{ inception_dest }}/srcs"
+    services:
+      - nginx
+    state: present
+    build: always
+  environment:
+    HOME: "{{ app_home }}"
