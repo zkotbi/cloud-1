@@ -1,5 +1,5 @@
 # Domain Configuration
-DOMAIN_NAME=hibenouk.worklet.dev
+DOMAIN_NAME=zkotbi.42.fr
 
 # MariaDB Configuration
 DB_NAME=wordpress_db
