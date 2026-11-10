@@ -1,31 +1,102 @@
 #!/bin/sh
+set -e
 
-set -x
+cd /var/www/html/wordpress
 
-wp core download --force
+mkdir -p /run/php
 
-mv wp-config-sample.php wp-config.php 
+echo "Waiting for MariaDB..."
 
-wp config set DB_NAME $DB_NAME
-wp config set DB_USER $DB_USER
-wp config set DB_PASSWORD $DB_PASS
-wp config set DB_HOST 'mariadb'
+until mariadb-admin ping \
+    -h mariadb \
+    -u root \
+    -p"$DB_ROOT_PASS" \
+    --silent
+do
+    sleep 2
+done
 
-sed -i 's/listen = 127.0.0.1:9000/listen = 9000/1' /etc/php83/php-fpm.d/www.conf
+echo "MariaDB is ready."
 
-wp core install --url=$DOMAIN_NAME \
-                --title=$WP_TITLE \
-                --admin_user=$WP_ADMIN_USER \
-                --admin_password=$WP_ADMIN_PASS \
-                --admin_email=$WP_ADMIN_EMAIL \
-                --skip-email 
+if [ ! -f wp-load.php ]; then
+    echo "WordPress files not found. Downloading WordPress..."
+    wp core download
+else
+    echo "WordPress files already exist. Skipping download."
+fi
 
+if [ ! -f wp-config.php ]; then
+    echo "Creating wp-config.php..."
 
-wp user create $WP_USER $WP_EMAIL --role=author --user_pass=$WP_PASS 
+    wp config create \
+        --dbname="$DB_NAME" \
+        --dbuser="$DB_USER" \
+        --dbpass="$DB_PASS" \
+        --dbhost="mariadb"
+else
+    echo "wp-config.php already exists. Skipping configuration."
+fi
 
+if ! wp core is-installed 2>/dev/null; then
+    echo "WordPress is not installed. Installing..."
 
-wp theme install twentytwentyfour --activate
+    wp core install \
+        --url="$DOMAIN_NAME" \
+        --title="$WP_TITLE" \
+        --admin_user="$WP_ADMIN_USER" \
+        --admin_password="$WP_ADMIN_PASS" \
+        --admin_email="$WP_ADMIN_EMAIL" \
+        --skip-email
+
+    echo "Creating WordPress user..."
+
+    wp user create \
+        "$WP_USER" \
+        "$WP_EMAIL" \
+        --role=author \
+        --user_pass="$WP_PASS"
+
+    echo "Installing WordPress theme..."
+
+    wp theme install twentytwentyfour --activate
+else
+    echo "WordPress is already installed. Skipping initialization."
+fi
+
+sed -i 's/listen = 127.0.0.1:9000/listen = 9000/1' \
+    /etc/php83/php-fpm.d/www.conf
 
 chmod -R 755 /var/www/html/wordpress
 
+echo "Starting PHP-FPM..."
+
 exec php-fpm83 -F
+# set -x
+
+# wp core download --force
+
+# mv wp-config-sample.php wp-config.php 
+
+# wp config set DB_NAME $DB_NAME
+# wp config set DB_USER $DB_USER
+# wp config set DB_PASSWORD $DB_PASS
+# wp config set DB_HOST 'mariadb'
+
+# sed -i 's/listen = 127.0.0.1:9000/listen = 9000/1' /etc/php83/php-fpm.d/www.conf
+
+# wp core install --url=$DOMAIN_NAME \
+#                 --title=$WP_TITLE \
+#                 --admin_user=$WP_ADMIN_USER \
+#                 --admin_password=$WP_ADMIN_PASS \
+#                 --admin_email=$WP_ADMIN_EMAIL \
+#                 --skip-email 
+
+
+# wp user create $WP_USER $WP_EMAIL --role=author --user_pass=$WP_PASS 
+
+
+# wp theme install twentytwentyfour --activate
+
+# chmod -R 755 /var/www/html/wordpress
+
+# exec php-fpm83 -F
