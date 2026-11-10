@@ -19,14 +19,3 @@
     owner: "{{ app_user }}"
     group: "{{ app_user }}"
     mode: "preserve"
-
-- name: Copy environment configuration
-  copy:
-    src: "{{ item }}"
-    dest: "{{ inception_dest }}/srcs/.env"
-    owner: "{{ app_user }}"
-    group: "{{ app_user }}"
-    mode: "0600"
-  with_first_found:
-    - "{{ playbook_dir }}/../inception/srcs/.env"
-    - "{{ playbook_dir }}/../inception/srcs/env-example"

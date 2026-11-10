@@ -1,4 +1,7 @@
 AGENTS.md
 log.txt
-
-
+.env
+*.key
+*.crt
+!srcs/requirements/nginx/ssl/README.md
+env-example
