@@ -12,7 +12,6 @@ services:
     restart: always
     volumes:
       - wordpress:/var/www/html/wordpress
-      - ./requirements/nginx/ssl:/etc/ssl/custom-certs:ro
     depends_on:
       wordpress:
         condition: service_healthy
@@ -60,6 +59,7 @@ networks:
 
 volumes:
   mariadb:
+    name: mariadb
     driver: local
     driver_opts:
       type: none
@@ -67,6 +67,7 @@ volumes:
       device: ${HOME}/data/mariadb 
 
   wordpress:
+    name: wordpress
     driver: local
     driver_opts:
       type: none
