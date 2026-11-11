@@ -2,20 +2,20 @@
 ---
 - name: Create inception and data directories
   file:
-    path: "{{ item }}"
+    path: "{{item}}"
     state: directory
-    owner: "{{ app_user }}"
-    group: "{{ app_user }}"
+    owner: "{{app_user}}"
+    group: "{{app_user}}"
     mode: "0755"
   loop:
-    - "{{ inception_dest }}"
-    - "{{ data_dest }}/mariadb"
-    - "{{ data_dest }}/wordpress"
+    - "{{inception_dest}}"
+    - "{{data_dest}}/mariadb"
+    - "{{data_dest}}/wordpress"
 
 - name: Copy Inception project (Makefile and srcs)
   copy:
-    src: "{{ playbook_dir }}/../inception/"
-    dest: "{{ inception_dest }}/"
-    owner: "{{ app_user }}"
-    group: "{{ app_user }}"
+    src: "{{playbook_dir}}/../inception/"
+    dest: "{{inception_dest}}/"
+    owner: "{{app_user}}"
+    group: "{{app_user}}"
     mode: "preserve"

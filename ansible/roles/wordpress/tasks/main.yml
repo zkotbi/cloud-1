@@ -1,10 +1,10 @@
 ---
 - name: Deploy WordPress
   community.docker.docker_compose_v2:
-    project_src: "{{ inception_dest }}/srcs"
+    project_src: "{{inception_dest}}/srcs"
     services:
       - wordpress
     state: present
     build: always
   environment:
-    HOME: "{{ app_home }}"
+    HOME: "{{app_home}}"
