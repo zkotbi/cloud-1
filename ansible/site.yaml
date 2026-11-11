@@ -8,7 +8,6 @@
     - docker
     - firewall
     - deploy
-    # - compose
 
     - role: mariadb
       tags: mariadb

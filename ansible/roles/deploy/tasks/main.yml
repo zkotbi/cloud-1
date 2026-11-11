@@ -12,7 +12,7 @@
     - "{{data_dest}}/mariadb"
     - "{{data_dest}}/wordpress"
 
-- name: Copy Inception project (Makefile and srcs)
+- name: Copy Inception project
   copy:
     src: "{{playbook_dir}}/../inception/"
     dest: "{{inception_dest}}/"

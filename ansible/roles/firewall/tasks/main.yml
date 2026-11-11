@@ -20,7 +20,7 @@
     port: "443"
     proto: tcp
 
-- name: Deny all incoming connections by default
+- name: Deny all incoming connections
   become: true
   ufw:
     direction: incoming

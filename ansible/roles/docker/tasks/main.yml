@@ -1,6 +1,5 @@
 #SPDX-License-Identifier: MIT-0
 ---
-# tasks file for docker
 - name: create keyrings directory
   become: true
 
@@ -50,5 +49,5 @@
     groups: docker
     append: yes
 
-- name: Reset SSH connection for docker group membership to take effect
+- name: Reset SSH connection
   meta: reset_connection

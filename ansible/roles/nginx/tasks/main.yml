@@ -1,5 +1,7 @@
 ---
 - name: Deploy Nginx
+  become: true
+
   community.docker.docker_compose_v2:
     project_src: "{{inception_dest}}/srcs"
     services:
@@ -8,3 +10,4 @@
     build: always
   environment:
     HOME: "{{app_home}}"
+    DOMAIN_NAME: "{{ansible_host}}"
